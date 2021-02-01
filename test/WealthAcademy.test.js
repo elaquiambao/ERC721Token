@@ -1,40 +1,40 @@
-// const { inTransaction } = require("@openzeppelin/test-helpers/src/expectEvent");
 const { BN, constants, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
 const { assert } = require("chai");
-// const { expect } = require("chai");
 const truffleAssert = require("truffle-assertions");
-
-
 const WealthAcademy = artifacts.require('WealthAcademy');
 
 contract('WealthAcademy', (accounts) => {
-  const [owner, newOwner, approved, anotherApproved, operator, other] = accounts;
+  let trainee1= accounts[1];
   const tokenNameExpected = "Wealth Academy Token";
   const tokenSymbolExpected ="WAT";
 
-  const firstTokenId = new BN ('0');
-  const secondTokenId = new BN('1');
+  const TokenId1 = 0;
+  const TokenId2 = 1;
   let WAInstance;
 
-  beforeEach(async () => {
+  before(async () => {
     WAInstance = await WealthAcademy.deployed();
     const name = await WAInstance.name();
     const symbol = await WAInstance.symbol();
     assert.equal(name, tokenNameExpected, "Token name is not as expected");
     assert.equal(symbol, tokenSymbolExpected, "Token symbol is not as expected");
-    await WAInstance.mint(owner, firstTokenId);
-    await WAInstance.mint(owner, secondTokenId);
+    await WAInstance.safeMint(trainee1, TokenId1);
+    await WAInstance.safeMint(trainee1, TokenId2);
   });
 
 
   it('deploys successfully', async () => {
+    assert(WAInstance.address !== " ");
   });
 
   it('tests balanceOf()'), async () => {
-    assert(new BigNumber(WAInstance.balanceOf(owner).isEqualTo(new BigNumber('2')));
-  }
+    const trainee1Balance = await WAInstance.balanceOf.call(trainee1);
+    console.log(trainee1Balance);
+    assert(new BN(trainee1Balance).isEqualTo(new BN(2)), "Token balance is not as expected");
+  };
 
   it('tests ownerOf()'), async () => {
+
     
   }
 
